@@ -7,12 +7,12 @@ using UnityEngine;
 
 namespace WeatherMultipliers
 {
-    [BepInPlugin("com.github", PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin("Blorb.WeatherMultipliers", PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     public class Plugin : BaseUnityPlugin
     {
         public static Dictionary<LevelWeatherType, ConfigEntry<float>> ValueMultipliers = new();
 
-        private readonly Harmony harmony = new("WeatherMultipliers");
+        private readonly Harmony harmony = new("Blorb.WeatherMultipliers");
         private static readonly Dictionary<LevelWeatherType, float> defaultValueMultipliers = new() {
             {LevelWeatherType.Rainy, 1.1f},
             {LevelWeatherType.Stormy, 1.35f},
