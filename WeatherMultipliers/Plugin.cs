@@ -1,28 +1,20 @@
-using System.Collections.Generic;
-using BepInEx;
-using BepInEx.Configuration;
+﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
-using UnityEngine;
 
 namespace WeatherMultipliers
 {
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     public class Plugin : BaseUnityPlugin
     {
+        public static new Config Config { get; internal set; }
+        internal static new ManualLogSource Logger { get; private set; }
         private readonly Harmony harmony = new(PluginInfo.PLUGIN_GUID);
 
         private void Awake()
         {
-            foreach (KeyValuePair<LevelWeatherType, float> entry in defaultValueMultipliers)
-            {
-                ValueMultipliers[entry.Key] = Config.Bind(
-                    "Multipliers",
-                    entry.Key.ToString(),
-                    Mathf.Clamp(entry.Value, 1, 1000),
-                    $"Scrap value multiplier for {entry.Key} weather"
-                    );
-            }
+            Config = new Config(base.Config);
+            Logger = base.Logger;
 
             harmony.PatchAll();
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
@@ -41,9 +33,9 @@ namespace WeatherMultipliers.patches
         {
             // Temporarily increase RoundManager scrapValueMultiplier based on rounds current weather
             LevelWeatherType weather = __instance.currentLevel.currentWeather;
-            if (Plugin.ValueMultipliers.ContainsKey(weather))
+            if (Config.Instance.ValueMultipliers.ContainsKey(weather))
             {
-                float multiplier = Plugin.ValueMultipliers[__instance.currentLevel.currentWeather].Value;
+                float multiplier = Config.Instance.ValueMultipliers[__instance.currentLevel.currentWeather].Value;
                 __instance.scrapValueMultiplier *= multiplier;
                 logger.LogInfo($"Set scrap value multiplier ({multiplier}) for current weather \"{weather}\"");
             }
@@ -57,9 +49,9 @@ namespace WeatherMultipliers.patches
         {
             // Reset RoundManager scrapValueMultiplier to original value
             LevelWeatherType weather = __instance.currentLevel.currentWeather;
-            if (Plugin.ValueMultipliers.ContainsKey(weather))
+            if (Config.Instance.ValueMultipliers.ContainsKey(weather))
             {
-                float multiplier = Plugin.ValueMultipliers[__instance.currentLevel.currentWeather].Value;
+                float multiplier = Config.Instance.ValueMultipliers[__instance.currentLevel.currentWeather].Value;
                 __instance.scrapValueMultiplier /= multiplier;
                 logger.LogInfo($"Scrap generated, resetting scrap value multiplier to its original value of {__instance.scrapValueMultiplier}");
             }
@@ -74,9 +66,9 @@ namespace WeatherMultipliers.patches
         private static void Prefix(LungProp __instance)
         {
             LevelWeatherType weather = __instance.roundManager.currentLevel.currentWeather;
-            if (Plugin.ValueMultipliers.ContainsKey(weather))
+            if (Config.Instance.ValueMultipliers.ContainsKey(weather))
             {
-                float multiplier = Plugin.ValueMultipliers[weather].Value;
+                float multiplier = Config.Instance.ValueMultipliers[weather].Value;
                 __instance.scrapValue = (int)(multiplier * __instance.scrapValue);
                 logger.LogInfo($"Adjusting LungProp (Apparatus) value for weather {weather}: {__instance.scrapValue}");
             }
