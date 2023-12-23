@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -7,19 +7,10 @@ using UnityEngine;
 
 namespace WeatherMultipliers
 {
-    [BepInPlugin("Blorb.WeatherMultipliers", PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     public class Plugin : BaseUnityPlugin
     {
-        public static Dictionary<LevelWeatherType, ConfigEntry<float>> ValueMultipliers = new();
-
-        private readonly Harmony harmony = new("Blorb.WeatherMultipliers");
-        private static readonly Dictionary<LevelWeatherType, float> defaultValueMultipliers = new() {
-            {LevelWeatherType.Rainy, 1.1f},
-            {LevelWeatherType.Stormy, 1.35f},
-            {LevelWeatherType.Foggy, 1.25f},
-            {LevelWeatherType.Flooded, 1.35f},
-            {LevelWeatherType.Eclipsed, 1.70f},
-        };
+        private readonly Harmony harmony = new(PluginInfo.PLUGIN_GUID);
 
         private void Awake()
         {
