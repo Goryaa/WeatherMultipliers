@@ -12,7 +12,7 @@ namespace WeatherMultipliers;
 [Serializable]
 public class Config : SyncedInstance<Config>
 {
-    public Dictionary<LevelWeatherType, ConfigEntry<float>> ValueMultipliers = [];
+    public Dictionary<LevelWeatherType, ConfigEntry<float>> ValueMultipliers = new();
 
     private static readonly Dictionary<LevelWeatherType, float> defaultValueMultipliers = new() {
             {LevelWeatherType.Rainy, 1.1f},
