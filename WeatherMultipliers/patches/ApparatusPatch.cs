@@ -13,7 +13,7 @@ public class ApparatusPatch
         LevelWeatherType weather = __instance.roundManager.currentLevel.currentWeather;
         if (Config.Instance.ValueMultipliers.ContainsKey(weather))
         {
-            float multiplier = Config.Instance.ValueMultipliers[weather].Value;
+            float multiplier = Config.Instance.ValueMultipliers[weather];
             __instance.scrapValue = (int)(multiplier * __instance.scrapValue);
             logger.LogInfo($"Adjusting LungProp (Apparatus) value for weather {weather}: {__instance.scrapValue}");
         }

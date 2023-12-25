@@ -12,7 +12,9 @@ namespace WeatherMultipliers;
 [Serializable]
 public class Config : SyncedInstance<Config>
 {
-    public Dictionary<LevelWeatherType, ConfigEntry<float>> ValueMultipliers = new();
+    // Based off https://gist.github.com/Owen3H/c73e09314ed71b254256cbb15fd8c51e
+
+    public Dictionary<LevelWeatherType, float> ValueMultipliers = new();
 
     private static readonly Dictionary<LevelWeatherType, float> defaultValueMultipliers = new() {
             {LevelWeatherType.Rainy, 1.1f},
@@ -32,14 +34,14 @@ public class Config : SyncedInstance<Config>
                 entry.Key.ToString(),
                 Mathf.Clamp(entry.Value, 1, 1000),
                 $"Scrap value multiplier for {entry.Key} weather"
-                );
+                ).Value;
         }
     }
 
     public static void RequestSync()
     {
         if (!IsClient) return;
-
+        Plugin.Logger.LogInfo($"Attempting to sync config with host");
         using FastBufferWriter stream = new(IntSize, Allocator.Temp);
         MessageManager.SendNamedMessage($"{PluginInfo.PLUGIN_GUID}_OnRequestConfigSync", 0uL, stream);
     }
@@ -60,11 +62,11 @@ public class Config : SyncedInstance<Config>
             stream.WriteValueSafe(in value, default);
             stream.WriteBytesSafe(array);
 
-            MessageManager.SendNamedMessage($"{PluginInfo.PLUGIN_GUID}_OnReceiveConfigSync", clientId, stream);
+            MessageManager.SendNamedMessage($"{PluginInfo.PLUGIN_GUID}_OnReceiveConfigSync", clientId, stream, NetworkDelivery.ReliableFragmentedSequenced);
         }
         catch (Exception e)
         {
-            Plugin.Logger.LogInfo($"Error occurred syncing config with client: {clientId}\n{e}");
+            Plugin.Logger.LogError($"Error occurred syncing config with client: {clientId}\n{e}");
         }
     }
 
@@ -97,14 +99,14 @@ public class Config : SyncedInstance<Config>
     {
         if (IsHost)
         {
-            MessageManager.RegisterNamedMessageHandler("ModName_OnRequestConfigSync", OnRequestSync);
+            MessageManager.RegisterNamedMessageHandler($"{PluginInfo.PLUGIN_GUID}_OnRequestConfigSync", OnRequestSync);
             Synced = true;
 
             return;
         }
 
         Synced = false;
-        MessageManager.RegisterNamedMessageHandler("ModName_OnReceiveConfigSync", OnReceiveSync);
+        MessageManager.RegisterNamedMessageHandler($"{PluginInfo.PLUGIN_GUID}_OnReceiveConfigSync", OnReceiveSync);
         RequestSync();
     }
 

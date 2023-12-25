@@ -17,6 +17,7 @@ namespace WeatherMultipliers
             Logger = base.Logger;
 
             harmony.PatchAll();
+            harmony.PatchAll(typeof(Config));
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
         }
     }

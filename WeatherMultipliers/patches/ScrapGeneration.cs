@@ -14,7 +14,7 @@ public class ScrapGeneration
         LevelWeatherType weather = __instance.currentLevel.currentWeather;
         if (Config.Instance.ValueMultipliers.ContainsKey(weather))
         {
-            float multiplier = Config.Instance.ValueMultipliers[__instance.currentLevel.currentWeather].Value;
+            float multiplier = Config.Instance.ValueMultipliers[__instance.currentLevel.currentWeather];
             __instance.scrapValueMultiplier *= multiplier;
             logger.LogInfo($"Set scrap value multiplier ({multiplier}) for current weather \"{weather}\"");
         }
@@ -30,7 +30,7 @@ public class ScrapGeneration
         LevelWeatherType weather = __instance.currentLevel.currentWeather;
         if (Config.Instance.ValueMultipliers.ContainsKey(weather))
         {
-            float multiplier = Config.Instance.ValueMultipliers[__instance.currentLevel.currentWeather].Value;
+            float multiplier = Config.Instance.ValueMultipliers[__instance.currentLevel.currentWeather];
             __instance.scrapValueMultiplier /= multiplier;
             logger.LogInfo($"Scrap generated, resetting scrap value multiplier to its original value of {__instance.scrapValueMultiplier}");
         }
