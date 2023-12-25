@@ -19,14 +19,6 @@ Current default values are:
 Set your own multipliers!
 After launching the game with the mod installed a WeatherMultipliers.cfg file will exist in your BepInEx/config folder.
 
-## Known Issues
-
-- When a player joins without the mod, they may not see the correct value for the apparatus. Normal scrap works though.
-
-## TODO
-
-- Add multiplier values on the weather terminal UI
-
 ## Manual Installation
 
 Place the `WeatherMultipliers.dll` file in your `BepInEx/plugins` directory.

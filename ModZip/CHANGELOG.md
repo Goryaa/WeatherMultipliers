@@ -1,3 +1,7 @@
+## 1.1.0
+
+- Sync config settings with host
+
 ### 1.0.0
 
 - Fix potential issue with the multipliers not being applied correctly
