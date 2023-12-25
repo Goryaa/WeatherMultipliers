@@ -8,11 +8,11 @@ Only the host needs the mod to set the scrap values.
 
 Current default values are:
 
-- Rainy: 10%
-- Foggy: 25%
-- Stormy: 35%
-- Flooded: 35%
-- Eclipsed: 70%
+- Rainy: 5%
+- Foggy: 15%
+- Stormy: 20%
+- Flooded: 25%
+- Eclipsed: 50%
 
 ## Config
 

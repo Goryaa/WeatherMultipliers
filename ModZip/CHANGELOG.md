@@ -1,6 +1,7 @@
 ## 1.1.0
 
 - Sync config settings with host
+- Lowered default multiplier values
 
 ### 1.0.0
 
